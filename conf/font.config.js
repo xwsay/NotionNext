@@ -1,60 +1,56 @@
 /**
  * 网站字体相关配置
- *
+ * 优化说明：
+ * 1. 彻底移除 Google Fonts，解决国内访问卡顿。
+ * 2. 修正 FontAwesome 版本为 6.4.2，防止图标丢失。
+ * 3. 优化字体加载顺序：西文优先 -> 中文兜底，显示效果最精致。
  */
 module.exports = {
   // START ************网站字体*****************
-  // ['font-serif','font-sans'] 两种可选，分别是衬线和无衬线: 参考 https://www.jianshu.com/p/55e410bd2115
-  // 后面空格隔开的font-light的字体粗细，留空是默认粗细；参考 https://www.tailwindcss.cn/docs/font-weight
-  FONT_STYLE: process.env.NEXT_PUBLIC_FONT_STYLE || 'font-sans font-light',
-  // 字体CSS 例如 https://npm.elemecdn.com/lxgw-wenkai-webfont@1.6.0/style.css
-  FONT_URL: [
-    // 'https://npm.elemecdn.com/lxgw-wenkai-webfont@1.6.0/style.css',
-    'https://fonts.googleapis.com/css?family=Bitter:300,400,700&display=swap',
-    'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap',
-    'https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;700&display=swap'
-  ],
+  
+  // 保持无衬线设计
+  FONT_STYLE: process.env.NEXT_PUBLIC_FONT_STYLE || 'font-sans',
+  
+  // 【关键】清空外链，斩断卡顿根源
+  FONT_URL: [],
 
-  // 字体优化配置
+  // 字体加载策略
   FONT_DISPLAY: process.env.NEXT_PUBLIC_FONT_DISPLAY || 'swap',
-  FONT_PRELOAD: process.env.NEXT_PUBLIC_FONT_PRELOAD || true,
+  FONT_PRELOAD: false, 
   FONT_SUBSET: process.env.NEXT_PUBLIC_FONT_SUBSET || 'chinese-simplified',
-  // 无衬线字体 例如'"LXGW WenKai"'
+  
+  // 【优化】无衬线字体栈 (西文优先策略)
+  // 解释：先找苹果/Win的系统西文字体，再找苹方/微软雅黑。
+  // 这样英文数字更漂亮，中文依然清晰。
   FONT_SANS: [
-    // '"LXGW WenKai"',
-    '"PingFang SC"',
+    // --- 西文优先 ---
     '-apple-system',
     'BlinkMacSystemFont',
-    '"Hiragino Sans GB"',
-    '"Microsoft YaHei"',
-    '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"',
     '"Segoe UI"',
-    '"Noto Sans SC"',
-    'HarmonyOS_Regular',
+    'Roboto',
     '"Helvetica Neue"',
-    'Helvetica',
-    '"Source Han Sans SC"',
     'Arial',
-    'sans-serif',
+    // --- 中文兜底 ---
+    '"PingFang SC"',       // Mac/iOS 中文
+    '"Hiragino Sans GB"',  // Mac 旧版中文
+    '"Microsoft YaHei"',   // Win 中文
+    'sans-serif',          // 最终保底
     '"Apple Color Emoji"'
   ],
-  // 衬线字体 例如'"LXGW WenKai"'
+  
+  // 衬线字体 (保持简单即可)
   FONT_SERIF: [
-    // '"LXGW WenKai"',
-    'Bitter',
-    '"Noto Serif SC"',
     'SimSun',
     '"Times New Roman"',
     'Times',
-    'serif',
-    '"Segoe UI Emoji"',
-    '"Segoe UI Symbol"',
-    '"Apple Color Emoji"'
+    'serif'
   ],
+  
+  // 【优化】升级到 6.4.2 版本 (国内字节跳动镜像)
+  // 解决部分新版图标显示为方块的问题
   FONT_AWESOME:
     process.env.NEXT_PUBLIC_FONT_AWESOME_PATH ||
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css' // font-awesome 字体图标地址; 可选 /css/all.min.css ， https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.0.0/css/all.min.css
+    'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/6.4.2/css/all.min.css'
 
   // END ************网站字体*****************
 }
